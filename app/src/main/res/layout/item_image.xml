@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:onClick="@{()->itemClickListener.ItemClick(model)}"
-            android:src="@{model.resourceImage}" />
+            app:imageUri="@{model.resourceImage}" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnDelete"

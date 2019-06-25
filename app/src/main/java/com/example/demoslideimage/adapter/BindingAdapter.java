@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.demoslideimage.custom.ItemOffSetDecoration;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+
 public class BindingAdapter {
     @androidx.databinding.BindingAdapter("android:src")
     public static void setImageResource(ImageView imageView, int resoucre) {
@@ -24,6 +26,13 @@ public class BindingAdapter {
     public static void loadImage(ImageView imageView, String url) {
         if (!url.isEmpty()) {
             Picasso.get().load(url).into(imageView);
+        }
+    }
+
+    @androidx.databinding.BindingAdapter({"app:imageUri"})
+    public static void loadImageUri(ImageView imageView, String uri) {
+        if (!uri.isEmpty()) {
+            Picasso.get().load(new File(uri)).into(imageView);
         }
     }
 

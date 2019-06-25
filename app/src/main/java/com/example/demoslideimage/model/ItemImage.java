@@ -7,9 +7,9 @@ import com.example.demoslideimage.BR;
 
 public class ItemImage extends BaseObservable {
     private String nameImage;
-    private int resourceImage;
+    private String resourceImage;
 
-    public ItemImage(String nameImage, int resourceImage) {
+    public ItemImage(String nameImage, String resourceImage) {
         this.nameImage = nameImage;
         this.resourceImage = resourceImage;
     }
@@ -18,11 +18,11 @@ public class ItemImage extends BaseObservable {
     }
 
     @Bindable
-    public int getResourceImage() {
+    public String getResourceImage() {
         return resourceImage;
     }
 
-    public void setResourceImage(int resourceImage) {
+    public void setResourceImage(String resourceImage) {
         this.resourceImage = resourceImage;
         notifyPropertyChanged(BR.resourceImage);
     }
