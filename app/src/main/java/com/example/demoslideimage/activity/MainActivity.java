@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 //        listItemImage.add(new ItemImage("ảnh 11", R.drawable.a11));
 //        listItemImage.add(new ItemImage("ảnh 12", R.drawable.a12));
 //        listItemImage.add(new ItemImage("ảnh 13", R.drawable.a13));
+        getAllImageInStorage();
 
         adapterRecyclerView = new MyAdapterRecyclerView(listItemImage, this);
         binding.setMyAdapter(adapterRecyclerView);
