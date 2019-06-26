@@ -1,11 +1,42 @@
-LOCAL_PATH := $(call my-dir)
+LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
-LOCAL_MODULE := videokit
-LOCAL_LDLIBS := -llog -ljnigraphics -lz -landroid
-ANDROID_LIB := -landroid
-LOCAL_CFLAGS := -I$(NDK)/sources/ffmpeg
-LOCAL_SRC_FILES :=  videokit.c ffmpeg.c ffmpeg_filter.c ffmpeg_opt.c cmdutils.c ffmpeg_cuvid.c ffmpeg_hw.c logjam.c
-LOCAL_SHARED_LIBRARIES := libavformat libavcodec libswscale libavutil libswresample libavfilter libavdevice
+LOCAL_MODULE:= libavutil
+LOCAL_SRC_FILES:= lib/libavutil.so
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/include
+include $(PREBUILT_SHARED_LIBRARY)
 
-include $(BUILD_SHARED_LIBRARY)
-$(call import-module, ffmpeg/android/$(ARCH))
+include $(CLEAR_VARS)
+LOCAL_MODULE:= libavfilter
+LOCAL_SRC_FILES:= lib/libavfilter.so
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/include
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE:= libavcodec
+LOCAL_SRC_FILES:= lib/libavcodec.so
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/include
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE:= libavdevice
+LOCAL_SRC_FILES:= lib/libavdevice.so
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/include
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE:= libavformat
+LOCAL_SRC_FILES:= lib/libavformat.so
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/include
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE:= libswresample
+LOCAL_SRC_FILES:= lib/libswresample.so
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/include
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE:= libswscale
+LOCAL_SRC_FILES:= lib/libswscale.so
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/include
+include $(PREBUILT_SHARED_LIBRARY)

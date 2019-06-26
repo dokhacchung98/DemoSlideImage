@@ -1,5 +1,7 @@
 package com.example.demoslideimage.ffmpeg;
 
+import java.util.ArrayList;
+
 @SuppressWarnings("unused")
 public interface CommandBuilder {
     CommandBuilder overwriteOutput();
@@ -15,4 +17,5 @@ public interface CommandBuilder {
     CommandBuilder limitFrameRate(int framerate);
     CommandBuilder fastTune();
     Command build();
+    Command buildCustomCommand(ArrayList<String> command);
 }

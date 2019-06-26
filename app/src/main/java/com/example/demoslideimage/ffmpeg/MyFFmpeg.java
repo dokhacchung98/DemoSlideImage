@@ -1,5 +1,7 @@
 package com.example.demoslideimage.ffmpeg;
 
+import android.util.Log;
+
 public class MyFFmpeg {
     static {
         try {
@@ -11,8 +13,9 @@ public class MyFFmpeg {
             System.loadLibrary("avfilter");
             System.loadLibrary("avdevice");
             System.loadLibrary("videokit");
+            Log.e("Loadding Libs", "Success");
         } catch (UnsatisfiedLinkError e) {
-            e.printStackTrace();
+            Log.e("Loadding Libs", "Error: " + e.getMessage());
         }
     }
 
@@ -27,6 +30,8 @@ public class MyFFmpeg {
     }
 
     private native int run(int loglevel, String[] args);
+
+    native static int nativeExecute(final String[] arguments);
 
     public CommandBuilder createCommand() {
         return new VideoCommandBuilder(this);
