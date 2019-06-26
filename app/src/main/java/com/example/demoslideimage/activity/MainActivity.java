@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 
 import com.example.demoslideimage.R;
@@ -14,6 +16,8 @@ import com.example.demoslideimage.adapter.MyAdapterRecyclerView;
 import com.example.demoslideimage.databinding.ActivityMainBinding;
 import com.example.demoslideimage.model.ItemImage;
 
+import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-
         initData();
     }
 
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 //        listItemImage.add(new ItemImage("ảnh 11", R.drawable.a11));
 //        listItemImage.add(new ItemImage("ảnh 12", R.drawable.a12));
 //        listItemImage.add(new ItemImage("ảnh 13", R.drawable.a13));
+
         getAllImageInStorage();
 
         adapterRecyclerView = new MyAdapterRecyclerView(listItemImage, this);
