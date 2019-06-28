@@ -5,7 +5,7 @@ android {
     buildToolsVersion "29.0.0"
     defaultConfig {
         applicationId "com.example.demoslideimage"
-        minSdkVersion 19
+        minSdkVersion 24
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -33,6 +33,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0-rc01'
+
 
     implementation "androidx.concurrent:concurrent-futures:$futures_version"
     implementation "androidx.concurrent:concurrent-listenablefuture:$futures_version"
@@ -56,6 +59,8 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.0.0-rc02'
     implementation 'androidx.navigation:navigation-ui:2.0.0-rc02'
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'com.writingminds:FFmpegAndroid:0.3.2'
 
+    implementation 'com.devbrackets.android:exomedia:4.3.0'
+
+    implementation 'com.arthenica:mobile-ffmpeg-full:4.2.1'
 }

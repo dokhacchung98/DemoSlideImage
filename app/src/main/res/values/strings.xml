@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">DemoSlideImage</string>
+    <string name="edit_image">Chỉnh Sửa Hình Ảnh</string>
+    <string name="create_video">Khởi Tạo Video</string>
+    <string name="denied_permision">Bạn cần cấp quyền trước khi thao tác</string>
+    <string name="back">Quay lại</string>
+    <string name="error_intent">Có lỗi bất ngờ xảy ra, vui lòng thử lại</string>
+    <string name="play">Play</string>
 </resources>

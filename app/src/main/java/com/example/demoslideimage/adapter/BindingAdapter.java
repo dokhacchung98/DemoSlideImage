@@ -32,7 +32,7 @@ public class BindingAdapter {
     @androidx.databinding.BindingAdapter({"app:imageUri"})
     public static void loadImageUri(ImageView imageView, String uri) {
         if (!uri.isEmpty()) {
-            Picasso.get().load(new File(uri)).into(imageView);
+            Picasso.get().load(new File(uri)).centerCrop().fit().into(imageView);
         }
     }
 
@@ -44,7 +44,7 @@ public class BindingAdapter {
     }
 
     @androidx.databinding.BindingAdapter("app:adapter")
-    public static void setAdapter(RecyclerView recyclerView, MyAdapterRecyclerView adapterRecyclerView) {
+    public static void setAdapter(RecyclerView recyclerView, MyAdapterRecyclerViewImageList adapterRecyclerView) {
         if (adapterRecyclerView != null) {
             recyclerView.setAdapter(adapterRecyclerView);
             ItemOffSetDecoration decoration = new ItemOffSetDecoration(0);

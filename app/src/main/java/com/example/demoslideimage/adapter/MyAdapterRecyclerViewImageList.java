@@ -14,23 +14,30 @@ import com.example.demoslideimage.R;
 import com.example.demoslideimage.databinding.ItemImageBinding;
 import com.example.demoslideimage.handler.CustomItemClickListener;
 import com.example.demoslideimage.handler.MyClickHandler;
+import com.example.demoslideimage.handler.MySelectedItem;
 import com.example.demoslideimage.model.ItemImage;
 import com.example.demoslideimage.BR;
 
 import java.util.ArrayList;
 
-public class MyAdapterRecyclerView extends RecyclerView.Adapter<MyAdapterRecyclerView.MyViewHolder>
+public class MyAdapterRecyclerViewImageList extends RecyclerView.Adapter<MyAdapterRecyclerViewImageList.MyViewHolder>
         implements CustomItemClickListener, MyClickHandler {
 
     private ArrayList<ItemImage> listItemImage;
     private Context context;
-    private boolean isActivityEdit = false;
+    private boolean isActivityVideo;
+    private MySelectedItem mySelectedItem;
 
     private ItemImageBinding itemImageBinding;
 
-    public MyAdapterRecyclerView(ArrayList<ItemImage> listItemImage, Context context) {
+    public MyAdapterRecyclerViewImageList(ArrayList<ItemImage> listItemImage, Context context, boolean isActivityVideo) {
         this.listItemImage = listItemImage;
         this.context = context;
+        this.isActivityVideo = isActivityVideo;
+    }
+
+    public void setMySelectedItem(MySelectedItem mySelectedItem) {
+        this.mySelectedItem = mySelectedItem;
     }
 
     @NonNull
@@ -51,7 +58,7 @@ public class MyAdapterRecyclerView extends RecyclerView.Adapter<MyAdapterRecycle
         holder.bind(item);
         holder.itemImageBinding.setItemClickListener(this::ItemClick);
         holder.itemImageBinding.setHandler(this);
-        holder.itemImageBinding.setIsActvityEdit(isActivityEdit);
+        holder.itemImageBinding.setIsActvityEdit(isActivityVideo);
     }
 
     @Override
@@ -61,7 +68,9 @@ public class MyAdapterRecyclerView extends RecyclerView.Adapter<MyAdapterRecycle
 
     @Override
     public void ItemClick(ItemImage item) {
-        Toast.makeText(context, "click: " + item.getNameImage(), Toast.LENGTH_SHORT).show();
+        if (mySelectedItem != null) {
+            mySelectedItem.selectedItem(item);
+        }
     }
 
     @Override
@@ -73,14 +82,8 @@ public class MyAdapterRecyclerView extends RecyclerView.Adapter<MyAdapterRecycle
     public void onClickWithData(View view, Object value) {
         ItemImage item = (ItemImage) value;
         switch (view.getId()) {
-            case R.id.btnDelete:
-                if (listItemImage.contains(item)) {
-                    listItemImage.remove(item);
-                    notifyDataSetChanged();
-                }
-                break;
             case R.id.btnEdit:
-                Toast.makeText(context, "Edit " + item.getNameImage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "click: " + item.getNameImage(), Toast.LENGTH_SHORT).show();
                 break;
         }
     }

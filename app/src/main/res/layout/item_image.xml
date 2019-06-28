@@ -26,52 +26,34 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/background_border"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/imgThumbnail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="350dp"
             android:layout_gravity="start"
             android:onClick="@{()->itemClickListener.ItemClick(model)}"
             app:imageUri="@{model.resourceImage}" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|right"
-            android:layout_margin="12dp"
-            android:onClick="@{(v)->handler.onClickWithData(v, model)}"
-            android:src="@drawable/ic_delete"
-            android:visibility="@{is_actvity_edit ? View.GONE : View.VISIBLE}"
-            app:backgroundTint="#03A9F4"
-            app:borderWidth="2dp"
-            app:fabSize="mini"
-            app:rippleColor="#2196F3" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <Button
             android:id="@+id/btnEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_gravity="top|right"
             android:layout_marginTop="12dp"
-            android:layout_marginRight="64dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/ic_paint_brush"
             android:onClick="@{(v)->handler.onClickWithData(v, model)}"
-            android:src="@drawable/ic_pen"
-            android:visibility="@{is_actvity_edit ? View.GONE : View.VISIBLE}"
-            app:backgroundTint="#03A9F4"
-            app:borderWidth="2dp"
-            app:fabSize="mini"
-            app:rippleColor="#2196F3" />
+            android:visibility="@{is_actvity_edit ? View.GONE : View.VISIBLE}" />
 
         <View
-            android:layout_width="86dp"
-            android:layout_height="86dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_gravity="top|right"
-            android:drawableStart="@drawable/ic_checked"
-            android:visibility="@{is_actvity_edit ? View.VISIBLE : View.GONE}" />
+            android:background="@drawable/check"
+            android:visibility="@{is_actvity_edit ? ( model.selected ? View.VISIBLE : View.GONE) : View.GONE}" />
     </FrameLayout>
 </layout>

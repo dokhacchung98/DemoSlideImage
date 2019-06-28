@@ -8,6 +8,13 @@ import com.example.demoslideimage.BR;
 public class ItemImage extends BaseObservable {
     private String nameImage;
     private String resourceImage;
+    private boolean isSelected;
+
+    public ItemImage(String nameImage, String resourceImage, boolean isSelected) {
+        this.nameImage = nameImage;
+        this.resourceImage = resourceImage;
+        this.isSelected = isSelected;
+    }
 
     public ItemImage(String nameImage, String resourceImage) {
         this.nameImage = nameImage;
@@ -36,4 +43,15 @@ public class ItemImage extends BaseObservable {
         this.nameImage = nameImage;
         notifyPropertyChanged(BR.nameImage);
     }
+
+    @Bindable
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+        notifyPropertyChanged(BR.selected);
+    }
+
 }
