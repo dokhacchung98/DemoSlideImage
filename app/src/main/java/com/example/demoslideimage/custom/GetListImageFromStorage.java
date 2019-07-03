@@ -28,7 +28,7 @@ public class GetListImageFromStorage {
         while (cursor.moveToNext()) {
             absolutePathOfImage = cursor.getString(column_index_data);
 
-            listItemImage.add(new ItemImage(absolutePathOfImage, absolutePathOfImage));
+            listItemImage.add(new ItemImage(absolutePathOfImage.replaceAll("/", ""), absolutePathOfImage));
         }
         return listItemImage;
     }

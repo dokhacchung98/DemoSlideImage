@@ -4,13 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.demoslideimage.R;
+import com.example.demoslideimage.activity.EditImageActivity;
 import com.example.demoslideimage.databinding.ItemImageBinding;
 import com.example.demoslideimage.handler.CustomItemClickListener;
 import com.example.demoslideimage.handler.MyClickHandler;
@@ -81,18 +81,16 @@ public class MyAdapterRecyclerViewImageList extends RecyclerView.Adapter<MyAdapt
     @Override
     public void onClickWithData(View view, Object value) {
         ItemImage item = (ItemImage) value;
-        switch (view.getId()) {
-            case R.id.btnEdit:
-                Toast.makeText(context, "click: " + item.getNameImage(), Toast.LENGTH_SHORT).show();
-                break;
+        if (view.getId() == R.id.btnEdit) {
+            EditImageActivity.startInternt(context, item.getResourceImage());
         }
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        public ItemImageBinding itemImageBinding;
+        private ItemImageBinding itemImageBinding;
 
-        public MyViewHolder(ItemImageBinding itemImageBinding) {
+        MyViewHolder(ItemImageBinding itemImageBinding) {
             super(itemImageBinding.getRoot());
             this.itemImageBinding = itemImageBinding;
         }

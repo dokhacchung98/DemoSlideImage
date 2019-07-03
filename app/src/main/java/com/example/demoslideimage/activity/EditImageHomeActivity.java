@@ -23,10 +23,12 @@ import com.example.demoslideimage.R;
 import com.example.demoslideimage.adapter.MyAdapterRecyclerViewImageList;
 import com.example.demoslideimage.custom.GetListImageFromStorage;
 import com.example.demoslideimage.databinding.ActivityEditImageHomeBinding;
+import com.example.demoslideimage.extensions.PathVideo;
 import com.example.demoslideimage.handler.MyClickHandler;
 import com.example.demoslideimage.model.ItemImage;
 import com.example.demoslideimage.util.AsyncCommandTask;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class EditImageHomeActivity extends AppCompatActivity implements MyClickHandler {
@@ -76,28 +78,17 @@ public class EditImageHomeActivity extends AppCompatActivity implements MyClickH
     }
 
     private void initData() {
+        File file = new File(PathVideo.getPathTempImg(this));
+        if (!file.exists())
+            file.mkdirs();
+
+        File fileVD = new File(PathVideo.getPathTempVideo(this));
+        if (!fileVD.exists())
+            fileVD.mkdirs();
+
         listItemImage = new ArrayList<>();
 
         getAllImageInStorage();
-        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/videooo.mp4";
-        Log.e(this.getClass().getName(), "PATH: " + path);
-        String cmd = "-loop 1 -t 5 -i "
-                + listItemImage.get(0).getResourceImage()
-                + " -loop 1 -t 3 -i "
-                + listItemImage.get(1).getResourceImage()
-                + " -loop 1 -t 3 -i "
-                + listItemImage.get(4).getResourceImage()
-                + " -loop 1 -t 3 -i "
-                + listItemImage.get(2).getResourceImage()
-                + " -loop 1 -t 3 -i "
-                + listItemImage.get(3).getResourceImage()
-                + " -filter_complex [0:v]trim=duration=3,fade=t=out:st=2.5:d=0.5[v0];[1:v]trim=duration=3,fade=t=in:st=0:d=0.5,fade=t=out:st=2.5:d=0.5[v1];[2:v]trim=duration=3,fade=t=in:st=0:d=0.5,fade=t=out:st=2.5:d=0.5[v2];[3:v]trim=duration=3,fade=t=in:st=0:d=0.5,fade=t=out:st=2.5:d=0.5[v3];[v0][v1][v2][v3]concat=n=4:v=1:a=0,format=yuv420p[v] -map [v] -preset ultrafast "
-                + path;
-        EditImageHomeActivity.executeAsync(result -> {
-            Log.e(TAG, "result: " + result + ", success: " + FFmpeg.RETURN_CODE_SUCCESS + ", cancel: " + FFmpeg.RETURN_CODE_CANCEL);
-//            CreateVideoActivity.Internt(this);
-        }, cmd);
-
 
         adapterRecyclerView = new MyAdapterRecyclerViewImageList(listItemImage, this, false);
         binding.setMyAdapter(adapterRecyclerView);

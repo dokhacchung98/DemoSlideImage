@@ -39,6 +39,7 @@
             android:elevation="4dp"
             android:onClick="@{(v)->handler.onClick(v)}"
             android:text="@string/back"
-            android:textColor="@color/colorWhite" />
+            android:textColor="@color/colorWhite"
+            android:visibility="gone" />
     </FrameLayout>
 </layout>
