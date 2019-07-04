@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="model"
+            type="String" />
+
+        <variable
+            name="itemClickListener"
+            type="com.example.demoslideimage.handler.CustomItemClickListener" />
+
+        <variable
+            name="handler"
+            type="com.example.demoslideimage.handler.MyClickHandler" />
+    </data>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="250dp"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imgThumbnail"
+            android:layout_width="250dp"
+            android:layout_height="match_parent"
+            app:imageUri="@{model}" />
+
+        <Button
+            android:id="@+id/btnEdit"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="top|right"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/ic_paint_brush"
+            android:onClick="@{(v)->handler.onClickWithData(v, model)}" />
+    </FrameLayout>
+</layout>

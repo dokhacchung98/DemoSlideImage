@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.demoslideimage.custom.ItemOffSetDecoration;
@@ -40,6 +41,13 @@ public class BindingAdapter {
     public static void setLayoutManager(RecyclerView recyclerView, GridLayoutManager gridLayoutManager) {
         if (gridLayoutManager != null) {
             recyclerView.setLayoutManager(gridLayoutManager);
+        }
+    }
+
+    @androidx.databinding.BindingAdapter("app:layoutLayoutManager")
+    public static void setLayoutManager(RecyclerView recyclerView, LinearLayoutManager linearLayoutManager) {
+        if (linearLayoutManager != null) {
+            recyclerView.setLayoutManager(linearLayoutManager);
         }
     }
 

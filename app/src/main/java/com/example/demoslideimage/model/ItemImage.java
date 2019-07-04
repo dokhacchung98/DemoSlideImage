@@ -1,5 +1,6 @@
 package com.example.demoslideimage.model;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
@@ -54,4 +55,9 @@ public class ItemImage extends BaseObservable {
         notifyPropertyChanged(BR.selected);
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return resourceImage.toString();
+    }
 }

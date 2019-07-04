@@ -7,4 +7,13 @@
     <string name="error_intent">Có lỗi bất ngờ xảy ra, vui lòng thử lại</string>
     <string name="play">Play</string>
     <string name="brush">Vẽ</string>
+    <string name="label_text">Text</string>
+    <string name="label_emoji">Emoji</string>
+    <string name="label_sticker">Sticker</string>
+    <string name="label_eraser">Tẩy</string>
+    <string name="label_filter">Lọc</string>
+    <string name="opacity">Độ mờ</string>
+    <string name="size_brush">Độ lớn</string>
+    <string name="close">Đóng</string>
+    <string name="done">Xong</string>
 </resources>

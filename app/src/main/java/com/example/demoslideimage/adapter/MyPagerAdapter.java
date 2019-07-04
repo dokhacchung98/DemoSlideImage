@@ -1,17 +1,40 @@
 package com.example.demoslideimage.adapter;
 
+import android.app.Activity;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import com.example.demoslideimage.fragment.FragmentEffects;
-import com.example.demoslideimage.fragment.FragmentFrame;
-import com.example.demoslideimage.fragment.FragmentListImage;
-import com.example.demoslideimage.fragment.FragmentSound;
+import com.example.demoslideimage.fragment.EffectsFragment;
+import com.example.demoslideimage.fragment.FrameFragment;
+import com.example.demoslideimage.fragment.ListImageFragment;
+import com.example.demoslideimage.fragment.SoundFragment;
+
+import java.util.ArrayList;
 
 public class MyPagerAdapter extends FragmentStatePagerAdapter {
-    public MyPagerAdapter(FragmentManager fm) {
+    private ArrayList listImage;
+    private Activity activity;
+    private ListImageFragment listImageFragment;
+    private EffectsFragment effectsFragment;
+    private SoundFragment soundFragment;
+    private FrameFragment frameFragment;
+
+    public MyPagerAdapter(Activity activity,
+                          FragmentManager fm,
+                          ArrayList listImage,
+                          ListImageFragment listImageFragment,
+                          EffectsFragment effectsFragment,
+                          SoundFragment soundFragment,
+                          FrameFragment frameFragment) {
         super(fm);
+        this.listImage = listImage;
+        this.activity = activity;
+        this.frameFragment = frameFragment;
+        this.effectsFragment = effectsFragment;
+        this.listImageFragment = listImageFragment;
+        this.soundFragment = soundFragment;
     }
 
     @Override
@@ -19,16 +42,16 @@ public class MyPagerAdapter extends FragmentStatePagerAdapter {
         Fragment fragment = null;
         switch (position) {
             case 0:
-                fragment = new FragmentListImage();
+                fragment = listImageFragment;
                 break;
             case 1:
-                fragment = new FragmentEffects();
+                fragment = effectsFragment;
                 break;
             case 2:
-                fragment = new FragmentSound();
+                fragment = soundFragment;
                 break;
             case 3:
-                fragment = new FragmentFrame();
+                fragment = frameFragment;
                 break;
         }
         return fragment;

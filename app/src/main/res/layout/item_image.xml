@@ -36,6 +36,7 @@
             android:layout_height="350dp"
             android:layout_gravity="start"
             android:onClick="@{()->itemClickListener.ItemClick(model)}"
+            android:transitionName="imgFrom"
             app:imageUri="@{model.resourceImage}" />
 
         <Button

@@ -82,7 +82,7 @@ public class MyAdapterRecyclerViewImageList extends RecyclerView.Adapter<MyAdapt
     public void onClickWithData(View view, Object value) {
         ItemImage item = (ItemImage) value;
         if (view.getId() == R.id.btnEdit) {
-            EditImageActivity.startInternt(context, item.getResourceImage());
+            EditImageActivity.startInterntWithAnimTransition(context, item.getResourceImage(), itemImageBinding.imgThumbnail, false);
         }
     }
 

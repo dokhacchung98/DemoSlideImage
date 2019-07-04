@@ -1,6 +1,5 @@
 package com.example.demoslideimage.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -12,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.demoslideimage.R;
 import com.example.demoslideimage.adapter.MyAdapterRecyclerViewImageList;
+import com.example.demoslideimage.base.BaseActivity;
 import com.example.demoslideimage.custom.GetListImageFromStorage;
 import com.example.demoslideimage.databinding.ActivityCreateVideoHomeBinding;
 import com.example.demoslideimage.extensions.PathVideo;
@@ -30,7 +31,7 @@ import com.example.demoslideimage.model.ItemImage;
 import java.io.File;
 import java.util.ArrayList;
 
-public class CreateVideoHomeActivity extends AppCompatActivity implements MyClickHandler, MySelectedItem {
+public class CreateVideoHomeActivity extends BaseActivity implements MyClickHandler, MySelectedItem {
     private ActivityCreateVideoHomeBinding binding;
     private static String TAG = EditImageHomeActivity.class.getName();
     private ArrayList<ItemImage> listItemImage;
@@ -203,5 +204,12 @@ public class CreateVideoHomeActivity extends AppCompatActivity implements MyClic
     protected void onResume() {
         super.onResume();
         indexOfListUri = 1;
+        ArrayList<ItemImage> list = GetListImageFromStorage.getListImageFromStorage(this);
+        for (ItemImage x : list) {
+            if (!listItemImage.contains(x))
+                listItemImage.add(x);
+        }
+        adapterRecyclerView.notifyDataSetChanged();
+        Log.e(TAG, "Number of size: " + listItemImage.size());
     }
 }

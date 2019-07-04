@@ -1,6 +1,5 @@
 package com.example.demoslideimage.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
 
@@ -16,22 +15,33 @@ import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.VideoView;
 import com.example.demoslideimage.R;
 import com.example.demoslideimage.adapter.MyPagerAdapter;
+import com.example.demoslideimage.base.BaseActivity;
 import com.example.demoslideimage.databinding.ActivityCreateVideoBinding;
+import com.example.demoslideimage.databinding.FragmentListImageBinding;
 import com.example.demoslideimage.extensions.PathVideo;
 import com.example.demoslideimage.extensions.ShowLog;
 import com.example.demoslideimage.extensions.StringComand;
 import com.example.demoslideimage.extensions.TimeLoad;
+import com.example.demoslideimage.fragment.EffectsFragment;
+import com.example.demoslideimage.fragment.FrameFragment;
+import com.example.demoslideimage.fragment.ListImageFragment;
+import com.example.demoslideimage.fragment.SoundFragment;
+import com.example.demoslideimage.handler.CallBackChangeList;
 import com.example.demoslideimage.handler.MyClickHandler;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
 import java.util.ArrayList;
 
-public class CreateVideoActivity extends AppCompatActivity implements MyClickHandler, OnPreparedListener {
+public class CreateVideoActivity extends BaseActivity implements MyClickHandler, OnPreparedListener {
     private ActivityCreateVideoBinding binding;
-    private static final String LIST_IMAGE = "LIST_IMAGE";
     private static final String TAG = CreateVideoHomeActivity.class.getName();
     private ArrayList<String> listUriImage;
+    private ListImageFragment listImageFragment;
+    private EffectsFragment effectsFragment;
+    private FrameFragment frameFragment;
+    private SoundFragment soundFragment;
+    private CallBackChangeList callBackChangeList;
 
     private VideoView videoView;
 
@@ -48,15 +58,18 @@ public class CreateVideoActivity extends AppCompatActivity implements MyClickHan
         listUriImage = new ArrayList<>();
 
         binding.setHandler(this);
-        FragmentManager manager = getSupportFragmentManager();
-        MyPagerAdapter adapter = new MyPagerAdapter(manager);
 
-        binding.setAdapter(adapter);
+
         binding.tabLayout.setupWithViewPager(binding.viewPager);
 
         binding.tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(binding.viewPager));
 
         binding.viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(binding.tabLayout));
+
+        frameFragment = new FrameFragment();
+        effectsFragment = new EffectsFragment();
+        soundFragment = new SoundFragment();
+        listImageFragment = new ListImageFragment(this, listUriImage);
 
         setupVideoView();
     }
@@ -75,7 +88,12 @@ public class CreateVideoActivity extends AppCompatActivity implements MyClickHan
         videoView = binding.videoView;
         videoView.setOnPreparedListener(this);
         if (listUriImage.size() > 1) {
+            FragmentManager manager = getSupportFragmentManager();
+            MyPagerAdapter adapter = new MyPagerAdapter(this, manager, listUriImage, listImageFragment, effectsFragment, soundFragment, frameFragment);
+            binding.setAdapter(adapter);
             createVideoFromFolderTemp();
+        } else {
+            finish();
         }
     }
 
@@ -126,5 +144,20 @@ public class CreateVideoActivity extends AppCompatActivity implements MyClickHan
     @Override
     public void onPrepared() {
         videoView.start();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        listUriImage.clear();
+        String path = PathVideo.getPathTempImg(this);
+        File directory = new File(path);
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File tmp : files) {
+                listUriImage.add(tmp.getPath());
+            }
+        }
+        listImageFragment.changeListImage(listUriImage);
     }
 }
