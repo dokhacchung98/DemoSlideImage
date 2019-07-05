@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -28,17 +29,21 @@ import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.arthenica.mobileffmpeg.FFmpeg;
+import com.arthenica.mobileffmpeg.util.RunCallback;
 import com.example.demoslideimage.R;
 import com.example.demoslideimage.adapter.EditingToolsAdapter;
 import com.example.demoslideimage.adapter.FilterViewAdapter;
 import com.example.demoslideimage.base.BaseActivity;
 import com.example.demoslideimage.databinding.ActivityEditImageBinding;
 import com.example.demoslideimage.extensions.ShowLog;
+import com.example.demoslideimage.extensions.StringComand;
 import com.example.demoslideimage.fragment.EmojiBSFragment;
 import com.example.demoslideimage.fragment.PropertiesBSFragment;
 import com.example.demoslideimage.fragment.StickerBSFragment;
 import com.example.demoslideimage.fragment.TextEditorDialogFragment;
 import com.example.demoslideimage.handler.FilterListener;
+import com.example.demoslideimage.util.AsyncCommandTask;
 import com.example.demoslideimage.util.ToolType;
 
 import java.io.File;
@@ -247,16 +252,21 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
     @SuppressLint("MissingPermission")
     private void saveImage() {
         if (requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            showLoading("Saving...");
+            showLoading("Đang lưu...");
             String path;
             if (isReplace) {
-                path = uri;
+                path = uri.substring(0, uri.lastIndexOf("/")) + System.currentTimeMillis() + ".png";
             } else {
                 path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                         + File.separator + ""
                         + System.currentTimeMillis() + ".png";
             }
             File file = new File(path);
+            File tmpFile = new File(uri);
+            if (tmpFile.exists()) {
+                tmpFile.delete();
+            }
+
             try {
                 file.createNewFile();
 
@@ -268,9 +278,24 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
                 mPhotoEditor.saveAsFile(file.getAbsolutePath(), saveSettings, new PhotoEditor.OnSaveListener() {
                     @Override
                     public void onSuccess(@NonNull String imagePath) {
-                        hideLoading();
-                        ShowLog.ShowLog(EditImageActivity.this, binding.getRoot(), "Lưu ảnh thành công", true);
-                        mPhotoEditorView.getSource().setImageURI(Uri.fromFile(new File(imagePath)));
+                        if (isReplace) {
+                            final AsyncCommandTask asyncCommandTask = new AsyncCommandTask(returnCode -> {
+                                if (returnCode == FFmpeg.RETURN_CODE_SUCCESS) {
+                                    hideLoading();
+                                    ShowLog.ShowLog(EditImageActivity.this, binding.getRoot(), "Lưu ảnh thành công", true);
+                                    mPhotoEditorView.getSource().setImageURI(Uri.fromFile(new File(path)));
+                                } else {
+                                    hideLoading();
+                                    ShowLog.ShowLog(EditImageActivity.this, binding.getRoot(), "Lưu ảnh thất bại", false);
+                                }
+                            });
+                            asyncCommandTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+                                    StringComand.resizeImageKeepName(path, EditImageActivity.this));
+                        } else {
+                            hideLoading();
+                            ShowLog.ShowLog(EditImageActivity.this, binding.getRoot(), "Lưu ảnh thành công", true);
+                            mPhotoEditorView.getSource().setImageURI(Uri.fromFile(new File(imagePath)));
+                        }
                     }
 
                     @Override
@@ -279,6 +304,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
                         ShowLog.ShowLog(EditImageActivity.this, binding.getRoot(), "Lưu ảnh thất bại", false);
                     }
                 });
+
             } catch (IOException e) {
                 e.printStackTrace();
                 hideLoading();
@@ -289,6 +315,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case CAMERA_REQUEST:

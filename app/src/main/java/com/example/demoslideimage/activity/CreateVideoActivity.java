@@ -17,23 +17,26 @@ import com.example.demoslideimage.R;
 import com.example.demoslideimage.adapter.MyPagerAdapter;
 import com.example.demoslideimage.base.BaseActivity;
 import com.example.demoslideimage.databinding.ActivityCreateVideoBinding;
-import com.example.demoslideimage.databinding.FragmentListImageBinding;
 import com.example.demoslideimage.extensions.PathVideo;
 import com.example.demoslideimage.extensions.ShowLog;
 import com.example.demoslideimage.extensions.StringComand;
+import com.example.demoslideimage.extensions.StringDemo;
 import com.example.demoslideimage.extensions.TimeLoad;
 import com.example.demoslideimage.fragment.EffectsFragment;
 import com.example.demoslideimage.fragment.FrameFragment;
 import com.example.demoslideimage.fragment.ListImageFragment;
 import com.example.demoslideimage.fragment.SoundFragment;
+import com.example.demoslideimage.handler.CallBackAddFrame;
 import com.example.demoslideimage.handler.CallBackChangeList;
 import com.example.demoslideimage.handler.MyClickHandler;
+import com.example.demoslideimage.model.ItemRow;
+import com.example.demoslideimage.util.SettingVideo;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
 import java.util.ArrayList;
 
-public class CreateVideoActivity extends BaseActivity implements MyClickHandler, OnPreparedListener {
+public class CreateVideoActivity extends BaseActivity implements MyClickHandler, OnPreparedListener, CallBackAddFrame {
     private ActivityCreateVideoBinding binding;
     private static final String TAG = CreateVideoHomeActivity.class.getName();
     private ArrayList<String> listUriImage;
@@ -41,7 +44,9 @@ public class CreateVideoActivity extends BaseActivity implements MyClickHandler,
     private EffectsFragment effectsFragment;
     private FrameFragment frameFragment;
     private SoundFragment soundFragment;
-    private CallBackChangeList callBackChangeList;
+    private SettingVideo settingVideo;
+    private SettingVideo.Builder builderSettingVideo;
+    private String path;
 
     private VideoView videoView;
 
@@ -55,10 +60,10 @@ public class CreateVideoActivity extends BaseActivity implements MyClickHandler,
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_video);
 
+        builderSettingVideo = new SettingVideo.Builder();
+
         listUriImage = new ArrayList<>();
-
         binding.setHandler(this);
-
 
         binding.tabLayout.setupWithViewPager(binding.viewPager);
 
@@ -66,7 +71,16 @@ public class CreateVideoActivity extends BaseActivity implements MyClickHandler,
 
         binding.viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(binding.tabLayout));
 
-        frameFragment = new FrameFragment();
+        ArrayList<ItemRow> listFrame = new ArrayList<>();
+        listFrame.add(new ItemRow(R.drawable.f2));
+        listFrame.add(new ItemRow(R.drawable.f3));
+        listFrame.add(new ItemRow(R.drawable.f4));
+        listFrame.add(new ItemRow(R.drawable.f5));
+        listFrame.add(new ItemRow(R.drawable.f6));
+        listFrame.add(new ItemRow(R.drawable.f7));
+        listFrame.add(new ItemRow(R.drawable.f8));
+
+        frameFragment = new FrameFragment(this, listFrame, this);
         effectsFragment = new EffectsFragment();
         soundFragment = new SoundFragment();
         listImageFragment = new ListImageFragment(this, listUriImage);
@@ -91,44 +105,58 @@ public class CreateVideoActivity extends BaseActivity implements MyClickHandler,
             FragmentManager manager = getSupportFragmentManager();
             MyPagerAdapter adapter = new MyPagerAdapter(this, manager, listUriImage, listImageFragment, effectsFragment, soundFragment, frameFragment);
             binding.setAdapter(adapter);
-            createVideoFromFolderTemp();
         } else {
             finish();
         }
     }
 
     private void createVideoFromFolderTemp() {
-//        String path = PathVideo.getPathTempVideo(this) + "/temp.mp4";
-//
-//        String tmp = StringComand.addPictureFrameToVideo(this, path, "/data/data/com.example.demoslideimage/files/frame1.png");
-//        Log.e(TAG, tmp);
-//        EditImageHomeActivity.executeAsync(returnCode -> {
-//            if (returnCode == FFmpeg.RETURN_CODE_SUCCESS) {
-//                ShowLog.ShowLog(this, binding.getRoot(), "Them khung thanh cong", true);
-//            } else {
-//                ShowLog.ShowLog(this, binding.getRoot(), "Them khung that bai", false);
-//            }
-//        }, tmp);
-
-
-        String cmd = StringComand.createVideo(this, listUriImage, TimeLoad.TIME_MEDIUM, null);
+        Log.e(TAG, "createVideoFromFolderTemp() start create video");
+//        String cmd = StringComand.createVideo(this, listUriImage, TimeLoad.TIME_MEDIUM, null);
+        String path = PathVideo.getPathTempVideo(this);
+        StringDemo stringDemo = new StringDemo(listUriImage, path + "/temp.mp4");
+        String cmd = stringDemo.toString();
         Log.e(TAG, cmd);
         EditImageHomeActivity.executeAsync(result -> {
             if (result == FFmpeg.RETURN_CODE_SUCCESS) {
-                ShowLog.ShowLog(this, binding.getRoot(), "Thanh cong", true);
-                String path = PathVideo.getPathTempVideo(this) + "/temp.mp4";
-                videoView.setVideoURI(Uri.parse(path));
-
-
+                Log.e(TAG, "createVideoFromFolderTemp() success: " + settingVideo.getPathFrame());
+                if (settingVideo.getPathFrame() == null || !settingVideo.getPathSound().isEmpty()) {
+//                    addFrameToVideo();
+                } else {
+                    setPathVideoView("temp.mp4");
+                }
             } else {
                 ShowLog.ShowLog(this, binding.getRoot(), "That bai", false);
             }
         }, cmd);
     }
 
+    private void addFrameToVideo() {
+        Log.e(TAG, "addFrameToVideo() start add frame");
+        String pathFrame = settingVideo.getPathFrame();
+        String cmd = StringComand.addPictureFrameToVideo(this, pathFrame);
+        EditImageHomeActivity.executeAsync(result -> {
+            if (result == FFmpeg.RETURN_CODE_SUCCESS) {
+                Log.e(TAG, "addFrameToVideo() success");
+                setPathVideoView("temp1.mp4");
+            } else {
+                ShowLog.ShowLog(this, binding.getRoot(), "That bai", false);
+            }
+        }, cmd);
+    }
+
+    private void setPathVideoView(String name) {
+        ShowLog.ShowLog(this, binding.getRoot(), "Thanh cong", true);
+        path = PathVideo.getPathTempVideo(this) + "/" + name;
+        videoView.setVideoURI(Uri.parse(path));
+    }
+
     @Override
     public void onClick(View view) {
-
+        settingVideo = builderSettingVideo.build();
+        if (view.getId() == R.id.btnCreate) {
+            createVideoFromFolderTemp();
+        }
     }
 
     @Override
@@ -159,5 +187,10 @@ public class CreateVideoActivity extends BaseActivity implements MyClickHandler,
             }
         }
         listImageFragment.changeListImage(listUriImage);
+    }
+
+    @Override
+    public void AddFrame(String source) {
+        builderSettingVideo.setPathFrame("/data/data/com.example.demoslideimage/files/f2.png");
     }
 }

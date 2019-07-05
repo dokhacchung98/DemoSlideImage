@@ -92,26 +92,26 @@ public class EditImageHomeActivity extends BaseActivity implements MyClickHandle
         super.onBackPressed();
         overridePendingTransition(R.anim.fade_left_to_right_enter, R.anim.fade_left_to_right_exit);
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        boolean check = false;
-        ArrayList<ItemImage> list = GetListImageFromStorage.getListImageFromStorage(this);
-        ArrayList<ItemImage> tmpList = new ArrayList<>();
-        for (ItemImage x : list) {
-            for (int i = 0; i < listItemImage.size(); i++) {
-                if (listItemImage.get(i).toString().equals(x.toString())) {
-                    check = true;
-                    break;
-                }
-            }
-            if (!check) {
-                tmpList.add(x);
-            }
-            check = false;
-        }
-        listItemImage.addAll(tmpList);
-        adapterRecyclerView.notifyDataSetChanged();
-    }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        boolean check = false;
+//        ArrayList<ItemImage> list = GetListImageFromStorage.getListImageFromStorage(this);
+//        ArrayList<ItemImage> tmpList = new ArrayList<>();
+//        for (ItemImage x : list) {
+//            for (int i = 0; i < listItemImage.size(); i++) {
+//                if (listItemImage.get(i).toString().equals(x.toString())) {
+//                    check = true;
+//                    break;
+//                }
+//            }
+//            if (!check) {
+//                tmpList.add(x);
+//            }
+//            check = false;
+//        }
+//        listItemImage.addAll(tmpList);
+//        adapterRecyclerView.notifyDataSetChanged();
+//    }
 }
