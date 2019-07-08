@@ -72,13 +72,20 @@ public class CreateVideoActivity extends BaseActivity implements MyClickHandler,
         binding.viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(binding.tabLayout));
 
         ArrayList<ItemRow> listFrame = new ArrayList<>();
-        listFrame.add(new ItemRow(R.drawable.f2));
-        listFrame.add(new ItemRow(R.drawable.f3));
-        listFrame.add(new ItemRow(R.drawable.f4));
-        listFrame.add(new ItemRow(R.drawable.f5));
-        listFrame.add(new ItemRow(R.drawable.f6));
-        listFrame.add(new ItemRow(R.drawable.f7));
-        listFrame.add(new ItemRow(R.drawable.f8));
+        File directory = new File("/data/data/com.example.demoslideimage/files/frame");
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File tmp : files) {
+                listFrame.add(new ItemRow(tmp.getPath()));
+            }
+        }
+//        listFrame.add(new ItemRow(R.drawable.f2));
+//        listFrame.add(new ItemRow(R.drawable.f3));
+//        listFrame.add(new ItemRow(R.drawable.f4));
+//        listFrame.add(new ItemRow(R.drawable.f5));
+//        listFrame.add(new ItemRow(R.drawable.f6));
+//        listFrame.add(new ItemRow(R.drawable.f7));
+//        listFrame.add(new ItemRow(R.drawable.f8));
 
         frameFragment = new FrameFragment(this, listFrame, this);
         effectsFragment = new EffectsFragment();
@@ -120,10 +127,10 @@ public class CreateVideoActivity extends BaseActivity implements MyClickHandler,
         EditImageHomeActivity.executeAsync(result -> {
             if (result == FFmpeg.RETURN_CODE_SUCCESS) {
                 Log.e(TAG, "createVideoFromFolderTemp() success: " + settingVideo.getPathFrame());
-                if (settingVideo.getPathFrame() == null || !settingVideo.getPathSound().isEmpty()) {
-//                    addFrameToVideo();
-                } else {
+                if (settingVideo.getPathFrame() == null || settingVideo.getPathFrame().isEmpty()) {
                     setPathVideoView("temp.mp4");
+                } else {
+                    addFrameToVideo();
                 }
             } else {
                 ShowLog.ShowLog(this, binding.getRoot(), "That bai", false);
@@ -138,7 +145,25 @@ public class CreateVideoActivity extends BaseActivity implements MyClickHandler,
         EditImageHomeActivity.executeAsync(result -> {
             if (result == FFmpeg.RETURN_CODE_SUCCESS) {
                 Log.e(TAG, "addFrameToVideo() success");
-                setPathVideoView("temp1.mp4");
+                if (settingVideo.getPathSound() == null || settingVideo.getPathSound().isEmpty()) {
+                    setPathVideoView("temp1.mp4");
+                } else {
+                    addSoundToVideo();
+                }
+            } else {
+                ShowLog.ShowLog(this, binding.getRoot(), "That bai", false);
+            }
+        }, cmd);
+    }
+
+    private void addSoundToVideo() {
+        Log.e(TAG, "addSoundToVideo() start add Sound");
+        String pathSound = settingVideo.getPathSound();
+        String cmd = StringComand.addMusicToVideoCancelOldSound(this, pathSound);
+        EditImageHomeActivity.executeAsync(result -> {
+            if (result == FFmpeg.RETURN_CODE_SUCCESS) {
+                Log.e(TAG, "addSoundToVideo() success");
+                setPathVideoView("temp2.mp4");
             } else {
                 ShowLog.ShowLog(this, binding.getRoot(), "That bai", false);
             }
@@ -191,6 +216,6 @@ public class CreateVideoActivity extends BaseActivity implements MyClickHandler,
 
     @Override
     public void AddFrame(String source) {
-        builderSettingVideo.setPathFrame("/data/data/com.example.demoslideimage/files/f2.png");
+        builderSettingVideo.setPathFrame(source);
     }
 }

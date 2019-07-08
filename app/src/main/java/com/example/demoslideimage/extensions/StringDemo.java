@@ -12,8 +12,8 @@ public class StringDemo {
     private String cmd1 = "";
     private String cmd2 = "";
     private String cmd3 = "";
-    private int WIDTH = 1280;
-    private int HEIGHT = 720;
+    private int WIDTH = 720;
+    private int HEIGHT = 480;
     private static final int FPS = 30;
     private int direction = TOPTOBOTTOM;
     private static final int TOPTOBOTTOM = 1;

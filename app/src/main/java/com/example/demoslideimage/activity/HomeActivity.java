@@ -16,6 +16,7 @@ import com.example.demoslideimage.R;
 import com.example.demoslideimage.databinding.ActivityHomeBinding;
 import com.example.demoslideimage.handler.MyClickHandler;
 
+import java.io.File;
 
 public class HomeActivity extends AppCompatActivity implements MyClickHandler {
     private ActivityHomeBinding binding;

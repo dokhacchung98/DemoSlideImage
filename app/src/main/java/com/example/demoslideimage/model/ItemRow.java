@@ -8,12 +8,21 @@ import com.example.demoslideimage.R;
 
 public class ItemRow extends BaseObservable {
     private int source;
+    private String path;
 
     public ItemRow() {
     }
 
     public ItemRow(int source) {
         this.source = source;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public ItemRow(String path) {
+        this.path = path;
     }
 
     @Bindable
@@ -27,6 +36,6 @@ public class ItemRow extends BaseObservable {
     }
 
     public String getPath() {
-        return "android.resource://" + R.class.getPackage().getName() + "/" + source;
+        return path;
     }
 }
